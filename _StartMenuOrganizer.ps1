@@ -1,6 +1,6 @@
 <#
  Powershell scripts for auto-organizing the start menu.
- 
+
  This is the main file which calls all subfiles.
 
 To run:
@@ -8,6 +8,8 @@ To run:
     Copy entire "StartMenuOrganizer" folder to "C:\Scripts".
     Right click this file in Windows Explorer.
     Select "Run With Powershell".
+    Follow prompts.
+    Note: "Categorize" should generally be allowed for a Win 7 install and disallowed for a Win 10 install.
 
 To enable Powershell scripts:
     * Launch a Powershell window as Administrator and use command:
@@ -115,60 +117,26 @@ Write-Host ""
 
 # Check if backupfolder already exists. If so, delete old backup.
 # Then create new backup of start menu before moving anything.
-<#
-	# Old. Works but does not back up one folder above.
 if (Test-Path $BackupPath) {
 	Write-Host " Backup Path Exists. Clearing previous Backup..."
 	$DelPath = ($BackupPath)
 	Invoke-Expression ($CurrentPath + "StartMenu\DF.ps1")
-	
-	Write-Host " Backing Up StartMenu..."
-	Copy-Item $StartMenuPD ($BackupPath + "ProgramData\") -force -Recurse
-	Copy-Item $StartMenuU ($BackupPath + "Users\") -force -Recurse
-} else {
-	Write-Host " Backing Up StartMenu..."
-	Copy-Item $StartMenuPD ($BackupPath + "ProgramData\") -force -Recurse
-	Copy-Item $StartMenuU ($BackupPath + "Users\") -force -Recurse
 }
-#>
 
+Write-Host " Backing Up StartMenu..."
 
-if (Test-Path $BackupPath) {
-	Write-Host " Backup Path Exists. Clearing previous Backup..."
-	$DelPath = ($BackupPath)
-	Invoke-Expression ($CurrentPath + "StartMenu\DF.ps1")
-	
-	Write-Host " Backing Up StartMenu..."
-	
-	# Standard ProgramData Start Menu Location.
-	Copy-Item $StartMenuPD ($BackupPath + "ProgramData\Programs\") -force -Recurse
-	# One folder above Standard ProgramData Start Menu Location. A rare select few things are dumb and install to here.
-	ls ($StartMenuPD + "..\") | ForEach {
-		Copy-Item ($_.FullName) ($BackupPath + "ProgramData\") -force -ErrorAction Stop
-	}
-	
-	# Standard User Start Menu Location.
-	Copy-Item $StartMenuU ($BackupPath + "Users\Programs\") -force -Recurse
-	# One folder above Standard User Start Menu Location. A rare select few things are dumb and install to here.
-	ls ($StartMenuU + "..\") | ForEach {
-		Copy-Item ($_.FullName) ($BackupPath + "Users\") -force -ErrorAction Stop
-	}
-} else {
-	Write-Host " Backing Up StartMenu..."
-	
-	# Standard ProgramData Start Menu Location.
-	Copy-Item $StartMenuPD ($BackupPath + "ProgramData\Programs\") -force -Recurse
-	# One folder above Standard ProgramData Start Menu Location. A rare select few things are dumb and install to here.
-	ls ($StartMenuPD + "..\") | ForEach {
-		Copy-Item ($_.FullName) ($BackupPath + "ProgramData\") -force -ErrorAction Stop
-	}
-	
-	# Standard User Start Menu Location.
-	Copy-Item $StartMenuU ($BackupPath + "Users\Programs\") -force -Recurse
-	# One folder above Standard User Start Menu Location. A rare select few things are dumb and install to here.
-	ls ($StartMenuU + "..\") | ForEach {
-		Copy-Item ($_.FullName) ($BackupPath + "Users\") -force -ErrorAction Stop
-	}
+# Standard ProgramData Start Menu Location.
+Copy-Item $StartMenuPD ($BackupPath + "ProgramData\Programs\") -force -Recurse
+# One folder above Standard ProgramData Start Menu Location. A rare select few things are dumb and install to here.
+ls ($StartMenuPD + "..\") | ForEach {
+    Copy-Item ($_.FullName) ($BackupPath + "ProgramData\") -force -ErrorAction Stop
+}
+
+# Standard User Start Menu Location.
+Copy-Item $StartMenuU ($BackupPath + "Users\Programs\") -force -Recurse
+# One folder above Standard User Start Menu Location. A rare select few things are dumb and install to here.
+ls ($StartMenuU + "..\") | ForEach {
+    Copy-Item ($_.FullName) ($BackupPath + "Users\") -force -ErrorAction Stop
 }
 
 Write-Host ""
@@ -182,7 +150,7 @@ Write-Host ""
 <#
     To reduce redundancy and make it easier, all files/folders are
     immediately moved to the "ProgramData" start menu folder.
-    
+
     Only exception is the "StartUp" folder because certain program
     installers will error out if it does not exist.
 #>
@@ -270,7 +238,7 @@ Write-Host ""
 
 ls ($CurrentPath + "\StartMenu\") | ForEach {
     if ($_.Name -ne "_Example.ps1" -and $_.Name -ne "MSMI.ps1" -and $_.Name -ne "DF.ps1" -and $_.Name -ne "DFS.ps1") {
-        
+
         if ($_.Name -eq "CAD") {
             ls ($CurrentPath + "\StartMenu\CAD") | ForEach {
                 $_.FullName | Invoke-Expression
@@ -287,10 +255,10 @@ ls ($CurrentPath + "\StartMenu\") | ForEach {
             ls ($CurrentPath + "\StartMenu\Mathematics") | ForEach {
                 $_.FullName | Invoke-Expression
             }
-		} elseif ($_.Name -eq "Multimedia") {
-			ls ($CurrentPath + "\StartMenu\Multimedia") | ForEach {
-				$_.FullName | Invoke-Expression
-			}
+    	} elseif ($_.Name -eq "Multimedia") {
+    		ls ($CurrentPath + "\StartMenu\Multimedia") | ForEach {
+    			$_.FullName | Invoke-Expression
+    		}
         } elseif ($_.Name -eq "Other") {
             ls ($CurrentPath + "\StartMenu\Other") | ForEach {
                 $_.FullName | Invoke-Expression

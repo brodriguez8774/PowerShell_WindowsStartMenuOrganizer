@@ -2,8 +2,6 @@
     Example
 #>
 
-Write-Host "StartMenu/_Example.ps1"
-
 
 # Moving a single shortcut.
 $SMFromPath = "CurrentPathToShortcut.lnk"

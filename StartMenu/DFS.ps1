@@ -1,8 +1,9 @@
 <#
     Delete File/Folder with safe checks.
-    
-    First check if folder is empty. If so, delete.
+
+    First check if folder is empty. If so, delete. Else skip.
 #>
+
 
 # Ensure path exists.
 IF (Test-Path ($DelPath)) {

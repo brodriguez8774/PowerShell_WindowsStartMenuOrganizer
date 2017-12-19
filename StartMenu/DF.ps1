@@ -1,8 +1,9 @@
 <#
-    Delete File/Folder
-    
-    First check if folder is empty. If so, delete.
+    Delete File/Folder.
+
+    Will delete folders regardless of if it contains files or not.
 #>
+
 
 # Ensure path exists.
 IF (Test-Path ($DelPath)) {
